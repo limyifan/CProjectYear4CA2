@@ -22,6 +22,16 @@ static void Section3();
 static bool checkHexValid(const char *str,int length);
 static int convertDecimal(const char *hex);
 char* substr(const char *src, int m, int n);
-static void convertRGB(const char *link);
+static void ConvertAndOutputRGBA(const char *link,const char *outputLink);
 static void ReadHexFile(char *link) ;
+static double ConvertAlpha(const char *hex);
+static void BubbleSort(int i, double size);
+struct RGBA
+{
+    int r;
+  int g;
+    int b;
+    double a;
+};
+struct RGBA RGBAList[10];
 #endif /* main_h */

@@ -20,10 +20,11 @@ static void Section1() {
 
 
 static void Section2() {
-    char link[100]="/Users/charles/Documents/c/Year4CA2/Year4CA2/colours.txt";
-    ReadHexFile(link);
+    char InputLink[100]="/Users/charles/Documents/c/Year4CA2/Year4CA2/colours.txt";
+    char outputLink[100]="/Users/charles/Documents/c/Year4CA2/Year4CA2/rgba-colours.txt";
+    ReadHexFile(InputLink);
     
-    convertRGB(link);
+    ConvertAndOutputRGBA(InputLink,outputLink);
 }
 
 static void Section3() {
@@ -42,10 +43,23 @@ static void ReadHexFile(char *link) {
     {
         int charcount = CountChar(output)-1;
         bool isHex=checkHexValid(output,charcount);
+
         if(isHex==true)
         {
+          
             
-            printf("%s",output);
+            if(charcount==6)
+            {
+                char *ro=substr(output,0,7);
+               printf("%s\n",strncat( strncat( ro,"ff", 1),"ff", 1));
+            }
+            else
+            {
+                char *ro=substr(output,0,9);
+                printf("%s\n",strncat(ro,"", 1));
+            }
+        
+            
             char *green=substr(output,3,5);
             printf("Green value: %s,%d\n",green,convertDecimal(green));
             
@@ -67,15 +81,14 @@ static int CountChar(char *string) {
     }
     return charcount;
 }
-static void convertRGB(const char *link)
+static void ConvertAndOutputRGBA(const char *link,const char *outputLink)
 {  FILE *fp = fopen(link, "r");
     if (fp==NULL)
     {
         printf("File not found...\n");
     }
     char output[256];
-    
-    printf("****RGB Colours List****\n");
+    int size=0;
     for(int j=1;fgets(output,sizeof(output),fp)!=NULL;j++)
     {
         int charcount = CountChar(output)-1;
@@ -83,21 +96,73 @@ static void convertRGB(const char *link)
         int r=0;
         int g=0;
         int b=0;
+        double a=0;
         if(isHex==true)
         {
-            char *red=substr(output,1,3);
-            char *green=substr(output,3,5);
-            char *blue=substr(output,5,7);
-            r=convertDecimal(red);
-            g=convertDecimal(green);
-            b=convertDecimal(blue);
-            printf("RGB(%d,%d,%d)\n",r,g,b);
+            
+               if(charcount==6)
+               {
+                  
+                   char *red=substr(output,1,3);
+                            char *green=substr(output,3,5);
+                            char *blue=substr(output,5,7);
+                            char *alpha="ff";
+                   RGBAList[j].r=convertDecimal(red);
+                   RGBAList[j].g=convertDecimal(green);
+                   RGBAList[j].b=convertDecimal(blue);
+                   RGBAList[j].a=ConvertAlpha(alpha)/255;
+                            
+                            
+               }
+               else
+               {
+                  
+                   char *red=substr(output,1,3);
+                            char *green=substr(output,3,5);
+                            char *blue=substr(output,5,7);
+                            char *alpha=substr(output,7,9);
+                            r=convertDecimal(red);
+                            g=convertDecimal(green);
+                            b=convertDecimal(blue);
+                          a=ConvertAlpha(alpha)/255;
+                   RGBAList[j].r=convertDecimal(red);
+                            RGBAList[j].g=convertDecimal(green);
+                            RGBAList[j].b=convertDecimal(blue);
+                            RGBAList[j].a=ConvertAlpha(alpha)/255;
+                        
+               }
+         
             
         }
-        
+        size++;
     }
     fclose(fp);
+    BubbleSort(1,size);
+    fp = fopen (outputLink,"w");
+    for(int i=1;i<size;i++)
+    {
+        //printf("RGBA(%d,%d,%d,%.1f)\n",RGBAList[i].r,RGBAList[i].g,RGBAList[i].b,RGBAList[i].a);
+        fprintf (fp,"RGBA(%d,%d,%d,%.1f)\n",RGBAList[i].r,RGBAList[i].g,RGBAList[i].b,RGBAList[i].a);
+    }
+     fclose (fp);
 }
+//Bubble sort the list by alpha value from  lowest to highest
+//ref: https://www.geeksforgeeks.org/bubble-sort/
+static void BubbleSort(int i, double size) {
+    for (int a = i; a <= size; ++a)
+    {
+        for (int b = a + 1; b <=size; ++b)
+        {
+            if (RGBAList[a].a > RGBAList[b].a)
+            {
+                struct RGBA temp=RGBAList[a];
+                RGBAList[a]=RGBAList[b];
+                RGBAList[b]=temp;
+            }
+        }
+    }
+}
+
 //https://stackoverflow.com/questions/4265161/how-to-convert-hexadecimal-to-rgb
 static int convertDecimal(const char *hex)
 {
@@ -105,6 +170,41 @@ static int convertDecimal(const char *hex)
     int val = 0;
     len--;
     int decimal=0;
+    
+    /*
+     * Iterate over each hex digit
+     */
+    for (int i = 0; i <2; i++)
+    {
+        
+        /* To find the decimal representation of hex[i] */
+        if(hex[i]>='0' && hex[i]<='9')
+        {
+            val = hex[i] - 48;
+        }
+        else if(hex[i]>='a' && hex[i]<='f')
+        {
+            val = hex[i] - 97 + 10;
+        }
+        else if(hex[i]>='A' && hex[i]<='F')
+        {
+            val = hex[i] - 65 + 10;
+        }
+        
+        decimal += val * pow(16, len);
+        len--;
+        
+    }
+    
+    return decimal;
+}
+
+static double ConvertAlpha(const char *hex)
+{
+    int len = 2;
+    int val = 0;
+    len--;
+    double decimal=0;
     
     /*
      * Iterate over each hex digit
