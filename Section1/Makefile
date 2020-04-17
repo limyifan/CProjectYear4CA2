@@ -1,17 +1,6 @@
 STRING 	=  'The quick brown fox jumps over the lazy dog\n'
 HTML 	= 'https://www.dkit.ie'
-ACS		= access.log
 
-<<<<<<< HEAD:Makefile
-# Run the solution (FYI: we could make run dependent on link)
-run:
-	./build/main
-	
-build/main:
-	gcc -c ${FLAGS} main.c -o build/main.o
-
-=======
->>>>>>> master:Section1/Makefile
 # echo the STRING words then pass result (input) to word count function with the option of count the number of words
 run-task-1:
 	echo ${STRING} | wc -w
@@ -27,22 +16,5 @@ run-task-3:
 # get first line and last line from dkit.html then pass the result (input) to sort function with the option of -reverse
 # After that, tr (translate function) translate the <> to [] then insert to mangled.txt file
 run-task-4: dkit.html
-<<<<<<< HEAD:Makefile
 	(head -n1 dkit.html & tail -n1 dkit.html) | sort -r | tr '<>' '[]'> mangled.txt
 
-# tail is the function to shows last n line from input/file. Default is 10 lines.
-task1:
-	tail ${ACS}
-
-# print the file as the input for next phase, , uniq is used to terminate the repeat data and print the result in terminal
-task2: 
-	cat ${ACS} | cut -d " " -f 1 | uniq
-	
-task3:
-	cat ${ACS} | egrep ' 404 ' | cut -d " " -f 3-5
-
-
-	
-=======
-	(head -n1 dkit.html & tail -n1 dkit.html) | sort -r | tr '<>' '[]'> mangled.txt
->>>>>>> master:Section1/Makefile
