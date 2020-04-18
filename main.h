@@ -23,9 +23,10 @@ static bool checkHexValid(const char *str,int length);
 static int convertDecimal(const char *hex);
 char* substr(const char *src, int m, int n);
 static void ConvertAndOutputRGBA(const char *link,const char *outputLink);
-static void ReadHexFile(char *link) ;
+static void FilterHexColors(char *link) ;
 static double ConvertAlpha(const char *hex);
 static void BubbleSort(int i, double size);
+static void ExtractGreenValues(char *link);
 struct RGBA
 {
     int r;
