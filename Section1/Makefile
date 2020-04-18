@@ -1,5 +1,5 @@
-STRING 	=  'The quick brown fox jumps over the lazy dog\n'
-HTML 	= 'https://www.dkit.ie'
+STRING	= 'The quick brown fox jumps over the lazy dog\n'
+HTML	= 'https://www.dkit.ie'
 
 # echo the STRING words then pass result (input) to word count function with the option of count the number of words
 run-task-1:
@@ -17,4 +17,3 @@ run-task-3:
 # After that, tr (translate function) translate the <> to [] then insert to mangled.txt file
 run-task-4: dkit.html
 	(head -n1 dkit.html & tail -n1 dkit.html) | sort -r | tr '<>' '[]'> mangled.txt
-

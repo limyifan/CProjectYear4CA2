@@ -1,43 +1,43 @@
-CC      = gcc
-FLAGS   = -Wall -Wextra -Wpedantic
-STRING 	=  'The quick brown fox jumps over the lazy dog\n'
-HTML 	= 'https://www.dkit.ie'
-ACS		= access.log
+CC		= gcc
+FLAGS	= -Wall -Wextra -Wpedantic
+ACS		= ../access.log
+CMD		= $$(cut -d " " -f 4,7 ../access.log)
 
-# Run the solution (FYI: we could make run dependent on link)
-run:
-	./build/main
-	
-build/main:
-	gcc -c ${FLAGS} main.c -o build/main.o
+# This target is the final compile and depends on other targets
+link: build/main.o
+	gcc $< -o main
 
-# echo the STRING words then pass result (input) to word count function with the option of count the number of words
-run-task-1:
-	echo ${STRING} | wc -w
-
-# echo the STRING words to determine then pass the result (input) to translate function with the option of convert text from lower case to upper case
-run-task-2:
-	echo ${STRING} | tr [:lower:] [:upper:]
-
-# curl used for transmit data from or to server. In this case, the html link is transfer to file name dkit.html
-run-task-3:
-	curl ${HTML} > dkit.html
-
-# get first line and last line from dkit.html then pass the result (input) to sort function with the option of -reverse
-# After that, tr (translate function) translate the <> to [] then insert to mangled.txt file
-run-task-4: dkit.html
-	(head -n1 dkit.html & tail -n1 dkit.html) | sort -r | tr '<>' '[]'> mangled.txt
+build/main.o: main.c
+	gcc -c $< -o main.o ${FLAGS}
 
 # tail is the function to shows last n line from input/file. Default is 10 lines.
-task1:
+run-task-1:
 	tail ${ACS}
 
 # print the file as the input for next phase, , uniq is used to terminate the repeat data and print the result in terminal
-task2: 
+run-task-2:
 	cat ${ACS} | cut -d " " -f 1 | uniq
-	
-task3:
+
+# search for 404 code with space at start and end which able to know as RESULT CODE
+# cut the line with the delimeter of " " and remain the range 3 to 5 of the line as those range is REQEUST portion. The range is determined as the string before the delimeter.
+# Example, deliemter of " " and String "Operating System is fun"
+#		1		2		3		4
+#	Operating System	is	   fun
+run-task-3:
 	cat ${ACS} | egrep ' 404 ' | cut -d " " -f 3-5
 
+# MSIE and Trident/7.0 stands for Microsoft Internet Explorer, so just need to find those words in those line
+# then > is insert, so > access.ie.log is means insert to a file called access.ie.log
+# reference for IE explorer user agent: https://developers.whatismybrowser.com/useragents/explore/software_name/internet-explorer/3
+# reference : https://alvinalexander.com/linux-unix/linux-egrep-multiple-regular-expressions-regex/
+run-task-4:
+	cat ${ACS} | (egrep 'MSIE|Trident/7.0') > access.ie.log
 
-	
+# In this case, the $() is to identify as priorty work however in Makefile it determined $( ... ) as empty.
+# So we need to add $ at front of $(...), $$(...), for let it know that $() is there
+# reference: https://unix.stackexchange.com/questions/512023/why-does-my-find-sed-command-work-in-the-terminal-but-not-in-a-makefile
+run-task-5:
+	./main1 $(CMD)
+
+
+
