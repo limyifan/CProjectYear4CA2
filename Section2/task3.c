@@ -35,10 +35,6 @@ static void ConvertAndOutputRGBA(const char *inputPath,const char *outputPath)
     {
         int charcount = CountChar(output)-1;
         bool isHex=checkHexValid(output,charcount);
-        int r=0;
-        int g=0;
-        int b=0;
-        double a=0;
         if(isHex==true)
         {
             //assign ff to the alpha color codes if it is a 6digit color codes
@@ -54,7 +50,6 @@ static void ConvertAndOutputRGBA(const char *inputPath,const char *outputPath)
                 RGBAList[j].b=convertDecimal(blue);
                 RGBAList[j].a=ConvertAlpha(alpha)/255;
                 
-                
             }
             else
             {
@@ -63,10 +58,6 @@ static void ConvertAndOutputRGBA(const char *inputPath,const char *outputPath)
                 char *green=substr(output,3,5);
                 char *blue=substr(output,5,7);
                 char *alpha=substr(output,7,9);
-                r=convertDecimal(red);
-                g=convertDecimal(green);
-                b=convertDecimal(blue);
-                a=ConvertAlpha(alpha)/255;
                 RGBAList[j].r=convertDecimal(red);
                 RGBAList[j].g=convertDecimal(green);
                 RGBAList[j].b=convertDecimal(blue);
