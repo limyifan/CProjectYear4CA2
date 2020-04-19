@@ -1,10 +1,10 @@
 CC		= gcc
 FLAGS	= -Wall -Wextra -Wpedantic
 ACS		= ../access.log
-CMD		= $$(cut -d " " -f 4,7 ../access.log)
+CMD		= $$(cut -d " " -f 4,7 ${ACS})
 
 # This target is the final compile and depends on other targets
-link: build/main.o
+link: main.o
 	gcc $< -o main
 
 build/main.o: main.c
@@ -14,9 +14,9 @@ build/main.o: main.c
 run-task-1:
 	tail ${ACS}
 
-# print the file as the input for next phase, , uniq is used to terminate the repeat data and print the result in terminal
+# print the file as the input for next phase, sort all which able for uniq as it only able to find duplicate line for current and next, uniq is used to terminate the repeat data and print the result in terminal
 run-task-2:
-	cat ${ACS} | cut -d " " -f 1 | uniq
+	cat ${ACS} | cut -d " " -f 1 | sort | uniq
 
 # search for 404 code with space at start and end which able to know as RESULT CODE
 # cut the line with the delimeter of " " and remain the range 3 to 5 of the line as those range is REQEUST portion. The range is determined as the string before the delimeter.
@@ -37,7 +37,7 @@ run-task-4:
 # So we need to add $ at front of $(...), $$(...), for let it know that $() is there
 # reference: https://unix.stackexchange.com/questions/512023/why-does-my-find-sed-command-work-in-the-terminal-but-not-in-a-makefile
 run-task-5:
-	./main1 $(CMD)
+	./main $(CMD)
 
 
 
