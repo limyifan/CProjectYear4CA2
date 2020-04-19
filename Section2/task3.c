@@ -1,106 +1,13 @@
-//
-//  main.c
-//  Year4CA2
-//
-//  Created by Yifan Lim on 01/04/2020.
-//  Copyright © 2020 Yifan Lim. All rights reserved.
-//
-#include"main.h"
-int main(int argc, const char * argv[]) {
-    Section1();
-    Section2();
-    Section3();
+#include "task3.h"
+
+int main() {
+    char inputPath[100]="../colours.txt";
+    char outputPath[100]="../rgba-colours.txt";
+    ConvertAndOutputRGBA(inputPath,outputPath);
     return 0;
 }
 
 
-static void Section1() {
-    
-}
-
-
-static void Section2() {
-    char inputPath[100]="/Users/charles/Documents/c/Year4CA2/Year4CA2/colours.txt";
-    char outputPath[100]="/Users/charles/Documents/c/Year4CA2/Year4CA2/rgba-colours.txt";
-    FilterHexColors(inputPath);
-    ExtractGreenValues(inputPath);
-    ConvertAndOutputRGBA(inputPath,outputPath);
-}
-
-static void Section3() {
-    
-}
-
-static void FilterHexColors(char *path) {
-    FILE *fp = fopen(path, "r");
-    
-    //Exceptions if no file is found within the path
-    if (fp==NULL)
-    {
-        printf("File not found...\n");
-    }
-    char output[256];
-    printf("****Valid Colours List****\n");
-    for(int i=1;fgets(output,sizeof(output),fp)!=NULL;i++)
-    {
-        int charcount = CountChar(output)-1;
-        bool isHex=checkHexValid(output,charcount);
-        
-        if(isHex==true)
-        {
-            //add ff to the end of the color codes if it is a 6digit color codes
-            if(charcount==6)
-            {
-                char *ro=substr(output,0,7);
-                printf("%s\n",strncat( strncat( ro,"ff", 1),"ff", 1));
-            }
-            else
-            {
-                char *ro=substr(output,0,9);
-                printf("%s\n",strncat(ro,"", 1));
-            }
-            
-        }
-        
-    }
-    fclose(fp);
-}
-static void ExtractGreenValues(char *path) {
-    FILE *fp = fopen(path, "r");
-    
-    //Exceptions if no file is found within the path
-    if (fp==NULL)
-    {
-        printf("File not found...\n");
-    }
-    char output[256];
-    printf("****Valid Colours List****\n");
-    for(int i=1;fgets(output,sizeof(output),fp)!=NULL;i++)
-    {
-        int charcount = CountChar(output)-1;
-        bool isHex=checkHexValid(output,charcount);
-        
-        if(isHex==true)
-        {
-            if(charcount==6)
-            {
-                //add ff to the end of the color codes if it is a 6digit color codes
-                char *ro=substr(output,0,7);
-                printf("%s",strncat( strncat( ro,"ff", 1),"ff", 1));
-            }
-            else
-            {
-                char *ro=substr(output,0,9);
-                printf("%s",strncat(ro,"", 1));
-            }
-            char *green=substr(output,3,5);
-            printf(",%d\n",convertDecimal(green));
-            
-        }
-        
-    }
-    fclose(fp);
-}
 static int CountChar(char *string) {
     const char * z = string;
     int m;
@@ -134,7 +41,7 @@ static void ConvertAndOutputRGBA(const char *inputPath,const char *outputPath)
         double a=0;
         if(isHex==true)
         {
-              //assign ff to the alpha color codes if it is a 6digit color codes
+            //assign ff to the alpha color codes if it is a 6digit color codes
             if(charcount==6)
             {
                 
@@ -307,5 +214,6 @@ static bool checkHexValid(const char *str,int length)
     }
     return isHex;
 }
+
 
 
