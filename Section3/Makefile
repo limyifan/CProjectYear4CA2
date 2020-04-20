@@ -7,7 +7,7 @@ CMD		= $$(cut -d " " -f 4,7 ${ACS})
 link: main.o
 	gcc $< -o main
 
-build/main.o: main.c
+main.o: main.c
 	gcc -c $< -o main.o ${FLAGS}
 
 # tail is the function to shows last n line from input/file. Default is 10 lines.
