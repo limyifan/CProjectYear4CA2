@@ -7,9 +7,9 @@
 
 ## Contents
 >Each Section has seperated folder in this project which are:
-- Section1
-- Section2
-- Section3
+- section-one
+- section-two
+- section-three
 
 ## Compile and run
 > Cd into each section folder and run the code using make command for example:
